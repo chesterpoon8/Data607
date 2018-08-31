@@ -1,0 +1,59 @@
+---
+title: "Data607 assignment 1"
+author: "Chester Poon"
+date: "8/31/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+First, we'll import the mushroom dataset and setup an unformatted data frame. 
+
+```{r}
+m <- data.frame(read.csv('https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data', header = FALSE, sep = ',', stringsAsFactors = FALSE))
+```
+
+Now I select the following characteristics interesting to me: **Edible/poisonous**, **cap-shape**, **odor**, **veil color**, and **habitat**.  From the data dictionary, we know that those columns are currently **V1**, **V2**, **V6**, **V18**, and **V23**.  
+
+Now I redefine the dataframe to include only the variables of interest and rename the columns to something that's closer to plain language.  I also only really want edible mushrooms with an almond aroma, so I will create a subset with those attributes.
+
+```{r}
+library(dplyr)
+m2 <- select(m, 'V1', 'V2', 'V6', 'V18', 'V23')
+mushrooms <- subset(m2, V1 == 'e' & V6 == 'a')
+colnames(mushrooms) <- c('Edible/Poisonous','Cap-shape','Odor','Veil Color','Habitat')
+```
+
+Now we replace the variables as defined in the data dictionary with something that's easier to understand.
+
+```{r}
+mushrooms$`Edible/Poisonous`[mushrooms$`Edible/Poisonous` == 'e'] <- 'Edible'
+
+mushrooms$`Cap-shape`[mushrooms$`Cap-shape` == 'b'] <- 'bell'
+mushrooms$`Cap-shape`[mushrooms$`Cap-shape` == 'c'] <- 'conical'
+mushrooms$`Cap-shape`[mushrooms$`Cap-shape` == 'x'] <- 'convex'
+mushrooms$`Cap-shape`[mushrooms$`Cap-shape` == 'f'] <- 'flat'
+mushrooms$`Cap-shape`[mushrooms$`Cap-shape` == 'k'] <- 'knobbed'
+mushrooms$`Cap-shape`[mushrooms$`Cap-shape` == 's'] <- 'sunken'
+
+mushrooms$Odor[mushrooms$Odor == 'a'] <- 'almond'
+
+mushrooms$`Veil Color`[mushrooms$`Veil Color` == 'w'] <- 'white'
+mushrooms$`Veil Color`[mushrooms$`Veil Color` == 'n'] <- 'brown'
+mushrooms$`Veil Color`[mushrooms$`Veil Color` == 'o'] <- 'orange'
+mushrooms$`Veil Color`[mushrooms$`Veil Color` == 'y'] <- 'yellow'
+
+mushrooms$Habitat[mushrooms$Habitat == 'g'] <- 'grasses'
+mushrooms$Habitat[mushrooms$Habitat == 'l'] <- 'leaves'
+mushrooms$Habitat[mushrooms$Habitat == 'm'] <- 'meadows'
+mushrooms$Habitat[mushrooms$Habitat == 'p'] <- 'paths'
+mushrooms$Habitat[mushrooms$Habitat == 'u'] <- 'urban'
+mushrooms$Habitat[mushrooms$Habitat == 'w'] <- 'waste'
+mushrooms$Habitat[mushrooms$Habitat == 'd'] <- 'woods'
+
+mushrooms
+```
+
+
