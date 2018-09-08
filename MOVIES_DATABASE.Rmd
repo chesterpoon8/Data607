@@ -5,7 +5,7 @@ date: "9/7/2018"
 output: html_document
 ---
 
-Data collection for this assignment was a bit tricky.  Thought it was clear that the data need not be totally valid for this assignment, I felt the need to at least try to get accurate data.  Since most people watch completely different movies at different times, it was hard to find 6 movies that people had commonly watched.  So I pulled the top grossing films of 2017 and 2018 and gathered the scoring results from 6 people and 1 dog.
+Data collection for this assignment was a bit tricky.  Though it was clear that the data need not be totally valid for this assignment, I felt the need to at least try to get accurate data.  Since most people watch completely different movies at different times, it was hard to find 6 movies that people had commonly watched.  So I pulled the top grossing films of 2017 and 2018 and gathered the scoring results from 6 people and 1 dog.  Respondents scored on a scale from 1 to 5; 5 being excellent, 1 being terrible.  If a respondent did not see a movie, no score was given.
 
 First we load the data into the database (see SQL script) and now we build a connection to the server with R.
 
@@ -14,14 +14,14 @@ library(RMySQL)
 
 movie_connect <- dbConnect(MySQL(),
                            user = 'root',
-                           password = '*******',
+                           password = '',
                            host = 'localhost',
                            dbname = 'movies')
 
 summary(movie_connect)
 ```
 
-Now that we have a connection to the database, let's run a simple query to get what people scored each movie that they saw.
+Now that we have a connection to the database, let's run a simple query to get how people scored each movie that they saw.
 
 ```{r}
 dbGetQuery(movie_connect, 
@@ -36,7 +36,7 @@ FROM SCORE S
 ")
 ```
 
-Kind of boring to look at.  Just for fun, let's take a deeper dive into the most watched films from this small group of people.  
+This just returns a basic raw data set.  Just for fun, let's take a deeper dive into the most watched films from this small group of people.  
 
 ```{r}
 dbGetQuery(movie_connect, 
@@ -54,7 +54,7 @@ ORDER BY
 ")
 ```
 
-Looks like the most watched films are Black Panther, Star Wars, Wonder Woman, and Beauty and the Beast.  Let's create a simple visualization that depicts the average score across these four movies.
+Looks like the most watched films are Black Panther, Star Wars, Wonder Woman, and Beauty and the Beast.  Let's create a simple visualization that depicts the average score across these four movies.  We'll also alter the SQL query so that if we ever update the data and anything changes, we can always pull the top four movies that have been scored in our database.
 
 ```{r}
 library(ggplot2)
@@ -62,13 +62,26 @@ library(ggplot2)
 TOP4 <- dbGetQuery(movie_connect, 
 "
 SELECT
-  M.MOVIE
+  MOV.MOVIE
   ,AVG(S.SCORE) AS AVG_SCORE
 FROM SCORE S
-  INNER JOIN MOVIES M ON S.MOVIE_ID = M.MOVIE_ID
-    AND M.MOVIE_ID IN ('BLA','STA','WON','BEA')
+  INNER JOIN (
+      SELECT
+        M.MOVIE
+        ,M.MOVIE_ID
+        ,COUNT(DISTINCT S.SCORE_ID) AS COUNT
+      FROM SCORE S
+        INNER JOIN MOVIES M ON S.MOVIE_ID = M.MOVIE_ID
+      GROUP BY
+        M.MOVIE
+        ,M.MOVIE_ID
+      ORDER BY
+        COUNT(DISTINCT S.SCORE_ID) DESC
+      LIMIT 4
+  ) MOV ON S.MOVIE_ID = MOV.MOVIE_ID
+
 GROUP BY
-  M.MOVIE
+  MOV.MOVIE
 ORDER BY
   AVG(S.SCORE) DESC
 ;
