@@ -7,7 +7,7 @@ output: html_document
 
 Data collection for this assignment was a bit tricky.  Though it was clear that the data need not be totally valid for this assignment, I felt the need to at least try to get accurate data.  Since most people watch completely different movies at different times, it was hard to find 6 movies that people had commonly watched.  So I pulled the top grossing films of 2017 and 2018 and gathered the scoring results from 6 people and 1 dog.  Respondents scored on a scale from 1 to 5; 5 being excellent, 1 being terrible.  If a respondent did not see a movie, no score was given.
 
-First we load the data into the database (see SQL script) and now we build a connection to the server with R.
+First we load the data into the database (see SQL script 'movies.sql') and now we build a connection to the server with R.
 
 ```{r}
 library(RMySQL)
