@@ -14,7 +14,7 @@ library(RMySQL)
 
 movie_connect <- dbConnect(MySQL(),
                            user = 'root',
-                           password = 'sccp8338',
+                           password = '*******',
                            host = 'localhost',
                            dbname = 'movies')
 
