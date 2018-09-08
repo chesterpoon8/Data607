@@ -27,7 +27,7 @@ Now that we have a connection to the database, let's run a simple query to get h
 dbGetQuery(movie_connect, 
 "
 SELECT
-	P.NAME
+  P.NAME
   ,M.MOVIE
   ,S.SCORE
 FROM SCORE S
