@@ -1,0 +1,81 @@
+---
+title: "MOVIES DATABASE"
+author: "Chester Poon"
+date: "9/7/2018"
+output: html_document
+---
+
+Data collection for this assignment was a bit tricky.  Thought it was clear that the data need not be totally valid for this assignment, I felt the need to at least try to get accurate data.  Since most people watch completely different movies at different times, it was hard to find 6 movies that people had commonly watched.  So I pulled the top grossing films of 2017 and 2018 and gathered the scoring results from 6 people and 1 dog.
+
+First we load the data into the database (see SQL script) and now we build a connection to the server with R.
+
+```{r}
+library(RMySQL)
+
+movie_connect <- dbConnect(MySQL(),
+                           user = 'root',
+                           password = 'sccp8338',
+                           host = 'localhost',
+                           dbname = 'movies')
+
+summary(movie_connect)
+```
+
+Now that we have a connection to the database, let's run a simple query to get what people scored each movie that they saw.
+
+```{r}
+dbGetQuery(movie_connect, 
+"
+SELECT
+	P.NAME
+  ,M.MOVIE
+  ,S.SCORE
+FROM SCORE S
+  INNER JOIN PERSON P ON S.NAME_ID = P.NAME_ID
+  INNER JOIN MOVIES M ON S.MOVIE_ID = M.MOVIE_ID;
+")
+```
+
+Kind of boring to look at.  Just for fun, let's take a deeper dive into the most watched films from this small group of people.  
+
+```{r}
+dbGetQuery(movie_connect, 
+"
+SELECT
+  M.MOVIE
+  ,COUNT(DISTINCT S.SCORE_ID) AS COUNT
+FROM SCORE S
+  INNER JOIN MOVIES M ON S.MOVIE_ID = M.MOVIE_ID
+GROUP BY
+  M.MOVIE
+ORDER BY
+  COUNT(DISTINCT S.SCORE_ID) DESC
+;
+")
+```
+
+Looks like the most watched films are Black Panther, Star Wars, Wonder Woman, and Beauty and the Beast.  Let's create a simple visualization that depicts the average score across these four movies.
+
+```{r}
+library(ggplot2)
+
+TOP4 <- dbGetQuery(movie_connect, 
+"
+SELECT
+  M.MOVIE
+  ,AVG(S.SCORE) AS AVG_SCORE
+FROM SCORE S
+  INNER JOIN MOVIES M ON S.MOVIE_ID = M.MOVIE_ID
+    AND M.MOVIE_ID IN ('BLA','STA','WON','BEA')
+GROUP BY
+  M.MOVIE
+ORDER BY
+  AVG(S.SCORE) DESC
+;
+")
+
+ggplot(TOP4, aes(x = MOVIE ,y = AVG_SCORE, fill = MOVIE)) +
+  geom_col() +
+  theme(axis.text.x = element_text(face="bold", angle=45, hjust = 1))
+```
+
