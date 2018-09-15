@@ -1,0 +1,149 @@
+---
+title: "Assignment Week 3"
+author: "Chester Poon"
+date: "9/14/2018"
+output: html_document
+---
+
+## Question 3
+
+#### First we load the data and create the "name" vector.
+
+```{r}
+library(stringr)
+
+raw.data <- "555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert"
+
+name <- unlist(str_extract_all(raw.data, "[[:alpha:]., ]{2,}"))
+```
+
+#### (a) Use the tools of this chapter to rearrange the vector so that all elements conform to the standard first_name last_name.
+
+```{r}
+reverse <- vector()
+last_first <- vector()
+name_split <- vector()
+combined <- vector()
+names_new <- vector()
+
+for (i in name) {
+  if(str_detect(i,",") == TRUE) {
+    last_first <- str_extract(i,".+")
+    name_split <- unlist(str_split(last_first, ", "))
+    reverse <- rev(name_split)
+    combined <- c(combined, str_c(reverse, sep = " ", collapse = " "))
+    combined <- unique(combined)
+  } else {
+    names_new <- c(names_new,i)
+  }
+}
+names_new <- c(names_new, combined)
+
+names_new
+```
+
+####(b) Construct a logical vector indicating whether a character has a title (i.e., Rev. and Dr.).
+
+Of course this assumes that "C." from "C. Montgomery Burns" is not a title and actually stands for "Charles".
+
+```{r}
+has_title <- str_detect(names_new,"[[:alpha:]]{2,}[[:punct:]]")
+
+has_title
+```
+
+####(c) Construct a logical vector indicating whether a character has a second name.
+
+This assumes that by "second name", we mean initials like "C." in Burns' name or anyone with a full middle name if we ever decide to add middle names to this list.  The below code also accounts for anyone with more than 2 names.
+
+```{r}
+many_names <- vector()
+
+for (i in names_new) {
+  if((str_detect(i,"[[:blank:]]*[[:upper:]][[:punct:]]") == TRUE) & (str_detect(i,"(.*[[:blank:]]){2,}") == TRUE)) {
+    many_names <- c(many_names,TRUE)
+  } else if ((str_detect(i,"[[:punct:]]") == FALSE) & (str_detect(i,"(.*[[:blank:]]){2,}") == TRUE)) {
+    many_names <- c(many_names,TRUE)
+  } else {
+    many_names <- c(many_names,FALSE)
+  }
+}
+
+many_names
+```
+
+## Question 4
+
+####(a) [0-9]+\\$
+This expression extracts only returns numbers that directly precede a "$" sign in the string.  Example:
+```{r}
+a <- "gr23f456$asd34"
+str_extract(a,"[0-9]+\\$")
+```
+
+####(b) \\b[a-z]{1,4}\\b
+This expression only returns strings that are all lower case letters as long as the string length is greater than or equal to 1 and less than or equal to 4. Example:
+```{r}
+b <- "asdf"
+str_extract(b,"\\b[a-z]{1,4}\\b")
+```
+
+
+####(c) .*?\\.txt$
+This expression returns any string that ends in ".txt".  Example:
+```{r}
+c <- "7hshjne3__fd.txt"
+str_extract(c,".*?\\.txt$")
+```
+
+
+####(d) \\d{2}/\\d{2}/\\d{4}
+This expression returns any string that appears in a numerical date format: mm/dd/yyyy or dd/mm/yyyy. Example:
+```{r}
+d <- "12/12/2018"
+str_extract(d,"\\d{2}/\\d{2}/\\d{4}")
+```
+
+
+####(e) <(.+?)>.+?</\\1>
+This expression returns a string that starts with "<" and then any string fragment of any length/format we'll call x, followed by a ">", then any string fragment of any length/format, then "</", then x, and then ">".  Example:
+```{r}
+e <- "<Ab1>g6_C</Ab1>"
+str_extract(e,"<(.+?)>.+?</\\1>")
+```
+
+##Question 9: Extra Credit
+
+First we load the code into a vector:
+
+```{r}
+code <- "clcopCow1zmstc0d87wnkig7OvdicpNuggvhryn92Gjuwczi8hqrfpRxs5Aj5dwpn0Tanwo
+Uwisdij7Lj8kpf03AT5Idr3coc0bt7yczjatOaootj55t3Nj3ne6c4Sfek.r1w1YwwojigO
+d6vrfUrbz2.2bkAnbhzgv4R9i05zEcrop.wAgnb.SqoU65fPa1otfb7wEm24k6t3sR9zqe5
+fy89n6Nd5t9kc4fE905gmc4Rgxo5nhDk!gr"
+
+```
+
+I had a hunch that the pattern involved upper case letters, so we can try the code below to extract just upper case letters:
+
+```{r}
+message <- str_extract_all(code,"[[:upper:]]")
+
+message
+```
+
+Immediately a message is decipherable.  
+
+>"CONGRATULATIONSYOUAREASUPERNERD".  
+
+Now that a clear sentence is visible, you can notice that there is period that occurs after every word except the last one, which ends the sentence in an exclamation point.  Let's pull in the punctuation into the string, use it as a marker to input spaces and to also apply appropriate grammar to the message:
+
+```{r}
+message <- unlist(str_extract_all(code,"[[:upper:],[[:punct:]]]"))
+message <- str_c(message,collapse = "")
+message <- str_replace(message,"\\.",", ")
+message <- str_replace_all(message,"\\."," ")
+message
+```
+
+....A fair assessment...
