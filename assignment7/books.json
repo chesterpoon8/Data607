@@ -1,0 +1,23 @@
+{"books_list" :[
+  {
+    "title" : "Automate the Boring Stuff with Python",
+    "author" : "Al Sweigart",
+    "subject" : "Python Programming",
+    "publisher" : "No Starch Press",
+    "comments" : "Great book on how to automate yourself into a new job! I used this book to do just that."
+  },
+  {
+    "title" : "A Long Way Gone: Memoirs of a Boy Soldier",
+    "author" : "Ishmael Beah",
+    "subject" : "Memoir",
+    "publisher" : "Sarah Crichton Books",
+    "comments" : "I went to college with the author and played intramural soccer with him not having the slightest idea of his past."
+  },
+  {
+    "title" : "Difficult Subjects: Insights and Strategies for Teaching About Race, Sexuality, and Gender",
+    "author" : ["Badia Ahad-Legardy", "OiYan A. Poon", "Lori Patton Davis"],
+    "subject" : "Education",
+    "publisher" : "Stylus Publishing",
+    "comments" : "My sister is one of the editors to this anthology of academic essays"
+  }]
+}

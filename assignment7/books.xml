@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<books_list>
+  <book id="1">
+    <title>Automate the Boring Stuff with Python</title>
+    <author>Al Sweigart</author>
+    <subject>Python Programming</subject>
+    <publisher>No Starch Press</publisher>
+    <comments>Great book on how to automate yourself into a new job!
+       I used this book to do just that.</comments>
+  </book>
+  <book id="2">
+    <title>A Long Way Gone: Memoirs of a Boy Soldier</title>
+    <author>Ishmael Beah</author>
+    <subject>Memoir</subject>
+    <publisher>Sarah Crichton Books</publisher>
+    <comments>I went to college with the author and played intramural soccer
+      with him not having the slightest idea of his past.</comments>
+  </book>
+  <book id="3">
+    <title>Difficult Subjects: Insights and Strategies for Teaching About
+      Race, Sexuality, and Gender</title>
+    <author editor1 = "Badia Ahad-Legardy"
+      editor2 = "OiYan A. Poon" editor3 = "Lori Patton Davis"/>
+    <subject>Education</subject>
+    <publisher>Stylus Publishing</publisher>
+    <comments>My sister is one of the editors to this anthology
+      of academic essays</comments>
+  </book>
+</books_list>
