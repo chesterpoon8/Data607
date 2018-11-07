@@ -56,4 +56,4 @@ When the user first signs up, some basic food preferences can be entered to help
 Developing some sort of “preferred flavors” or “favorite foods” feature for the user profile could also aid in improving the recommender system. Currently, the dataset per person is almost strictly based on order history of the user.
 
 #####Reference
-Trattner, C., Elsweiler, D. (2017, Nov 10) *Food Recommender Systems: Important Contributions, Challenges and Future Research Directions* Retrieved from https://fivethirtyeight.com/features/where-police-have-killed-americans-in-2015/
+Trattner, C., Elsweiler, D. (2017, Nov 10) *Food Recommender Systems: Important Contributions, Challenges and Future Research Directions* Retrieved from https://arxiv.org/abs/1711.02760
