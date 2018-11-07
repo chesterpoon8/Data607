@@ -1,0 +1,59 @@
+---
+title: "Seamless Recommender System"
+author: "Chester Poon"
+date: "11/6/2018"
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
+---
+
+<https://www.seamless.com/>
+
+##Scenario Design
+
+####Who are your target users?
+Seamless users
+
+####What are their key goals?
+The key goals of a seamless user is to figure out what to eat.
+
+####How can you help them accomplish those goals?
+
+For people with a history using seamless, past data on how often the user orders from certain restaurants and certain types of restaurants can help with recommending restaurants for users.
+
+For newer users, simple recommendations based on the users IP address would probably suffice. Additionally, placing the top-rated restaurants for that area around the IP address at the top of the list would best suit the needs of the user.
+ 
+##Attempt at Reverse Engineering the Seamless Recommender System (the following is entirely speculative):
+
+Seamless recommender system has many tiers. Their recommendations are given in the following order:
+
+####Your previous orders / ”Go to”
+
+This section presents all the restaurants you have previously ordered from. It places the most recent first and most frequent places you order from. This is the simplest form of recommendation through the site. It simply displays where you have already ordered from.
+
+####The most ordered  in “your” neighborhood
+
+This depends on your personal account settings. The site uses your location data to display restaurants where customers order food from most often.
+
+####Delivered fastest to you
+
+For every order ever placed for each restaurant, Seamless tracks the time it takes for when the order is submitted, when the order is acknowledged by the restaurant, when the order is sent out from the restaurant and when the order is confirmed delivered. This process is relayed to the customer via text message/email. It then models the time it takes from order submission to delivery to estimate the likely time of arrival from ordering. The top performing restaurants in the area are then displayed in this section.
+
+####Since you enjoy X cuisine
+
+Seamless takes all the restaurants you have ordered from recently and calculates what type of cuisine is the most frequent choice. It then returns a list of restaurants that fit that type of cuisine within your area.
+
+####Recommended for you (the bulk of the recommender system is here)
+
+Seamless presents a menu item recommendation for each restaurant viewed. When a restaurant partners with Seamless, the restaurant provides the name of the menu item followed by descriptive text. Often these menu items have generally the same ingredients across restaurants. Seamless gathered ingredient lists for every menu item for every restaurant and then most likely utilizes a content-based method to recommend items that are likely to be ordered by the user. For example, if chicken is a common ingredient in the items that have been previously ordered by the user, then the likelihood of the user ordering something with chicken in it is higher. The model also potentially accounts for ingredient combinations that the user might like. This is not unlike the “bag of words” and n-gram text analysis that we have worked on in the past.
+
+##Ways to Improve:
+
+Currently, the site asks only for an address and basic contact information when you sign up. Bulking up a personal profile would be more helpful.
+
+When the user first signs up, some basic food preferences can be entered to help improve the recommendation system. For example, if the user specifies that they are vegetarian, Seamless could then prioritize restaurants and food items that are vegetarian. For safety purposes, the user could also specify any food allergies, where the site could generate a warning if a food contains the allergen. Generally, we don’t want to exclude any of these restaurants and menu items altogether in case the user is ordering for more than one person.
+
+Developing some sort of “preferred flavors” or “favorite foods” feature for the user profile could also aid in improving the recommender system. Currently, the dataset per person is almost strictly based on order history of the user.
+
+#####Reference
+Trattner, C., Elsweiler, D. (2017, Nov 10) *Food Recommender Systems: Important Contributions, Challenges and Future Research Directions* Retrieved from https://fivethirtyeight.com/features/where-police-have-killed-americans-in-2015/
